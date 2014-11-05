@@ -1,0 +1,35 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+configurations { jbehave }
+
+dependencies {
+    testCompile "junit:junit:4.11"
+    testCompile (
+            'org.jbehave:jbehave-core:4.0-beta-11',
+            'de.codecentric:jbehave-junit-runner:1.1.2'
+
+    )
+}
+
+/*
+ * JBehave requires the Maven's "target" folder in order
+ * to obtain the absolute path from relative path.
+ */
+test {
+    doFirst {
+        file('target').mkdirs();
+    }
+
+    doLast {
+        file('target').delete();
+    }
+}
+
+task "create-dirs" << {
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+}
